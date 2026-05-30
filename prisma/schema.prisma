@@ -1,0 +1,77 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// User model for Admin authentication
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      String   @default("ADMIN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Portfolio Projects showcase
+model Project {
+  id           String    @id @default(uuid())
+  title        String
+  description  String
+  category     String    // e.g. "ui-ux", "products", "development", "graphics", "template"
+  client       String?
+  startDate    String?   // Store as string to match standard text formats in client
+  completeDate String?
+  services     String?   // comma-separated list of services
+  website      String?   // url link
+  imageUrl     String    // primary showcase image
+  gallery      String?   // comma-separated gallery image urls (JSON string or comma-separated)
+  featured     Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+}
+
+// Contact Quote / Project requests
+model QuoteRequest {
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  phone       String?
+  subject     String?
+  description String
+  budget      String   // e.g. "$1k - $5k", "$10k - $50k"
+  type        String   // "QUOTE" or "BUDGET_CONTACT"
+  createdAt   DateTime @default(now())
+}
+
+// FAQ Accordion items
+model Faq {
+  id        String   @id @default(uuid())
+  question  String
+  answer    String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+// Simple Page Analytics
+model AnalyticsEvent {
+  id        String   @id @default(uuid())
+  pageUrl   String
+  eventType String   // e.g. "PAGE_VIEW", "FORM_SUBMIT"
+  userAgent String?
+  ipAddress String?
+  timestamp DateTime @default(now())
+}
+
+// Chatbot messages
+model ChatMessage {
+  id        String   @id @default(uuid())
+  sessionId String
+  sender    String   // "USER" or "BOT"
+  message   String
+  timestamp DateTime @default(now())
+}

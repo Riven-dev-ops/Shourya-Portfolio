@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Dashboard - Inexa Admin</title>
+    <script src="assets/js/vendors/color-modes.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/template/favicon.svg" />
+    <link rel="stylesheet" href="assets/css/vendors/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/vendors/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="assets/css/vendors/aos.css" />
+    <link rel="stylesheet" href="assets/css/vendors/odometer.css" />
+    <link rel="stylesheet" href="assets/css/vendors/magnific-popup.css" />
+    <link rel="stylesheet" href="assets/css/vendors/carouselTicker.css" />
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="assets/fonts/boxicons/boxicons.min.css" />
+    <link rel="stylesheet" href="assets/fonts/fontawesome/fontawesome.min.css" />
+    <link rel="stylesheet" href="assets/fonts/fontawesome/brands.min.css" />
+    <link rel="stylesheet" href="assets/fonts/fontawesome/solid.min.css" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <style>
+        .admin-sidebar {
+            min-height: 80vh;
+            border-right: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        [data-bs-theme="dark"] .admin-sidebar {
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .nav-pills .nav-link {
+            color: var(--bs-body-color);
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+            background-color: #00d084 !important;
+            color: #fff !important;
+        }
+        .card-stat {
+            transition: transform 0.2s ease;
+        }
+        .card-stat:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+
+<body class="magic-cursor2">
+    <div class="follower"></div>
+    <div class="cursor"><span class="dot"></span></div>
+
+    <!-- Header Navbar -->
+    <header>
+        <nav class="navbar custom-container navbar-light start-50 translate-middle-x navbar-expand-lg py-0 mt-lg-4 mt-3 z-5 tcmenu__wrap">
+            <div class="d-flex p-3 p-lg-0 justify-content-between align-items-center w-100">
+                <a class="navbar-brand ms-lg-4 d-flex main-logo" href="index.html">
+                    <img src="assets/imgs/logo/favicon.svg" alt="inexa" />
+                    <span class="text-dark">Inexa Admin</span>
+                </a>
+                <div class="d-flex align-items-center me-lg-4 gap-4">
+                    <div class="dark-light-switcher d-flex justify-content-center align-items-center">
+                        <i class="bi theme-icon bi-sun-fill"></i>
+                        <i class="bi theme-icon bi-moon-stars-fill"></i>
+                    </div>
+                    <button class="btn btn-outline-danger fs-7 py-2 px-3" id="logoutBtn">
+                        <i class="bi bi-box-arrow-right me-1"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-5">
+        <div class="container mt-5">
+            <!-- Auth Check Spinner -->
+            <div id="authSpinner" class="text-center py-10">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3 text-secondary">Verifying credentials...</p>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div id="dashboardContent" class="row d-none">
+                <!-- Sidebar Navigation -->
+                <div class="col-lg-3 mb-4">
+                    <div class="admin-sidebar pe-lg-4">
+                        <h4 class="mb-4 text-dark font-bold">Workspace</h4>
+                        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <button class="nav-link active text-start mb-2" id="tab-overview" data-bs-toggle="pill" data-bs-target="#panel-overview" type="button" role="tab">
+                                <i class="bi bi-speedometer2 me-2"></i> Overview
+                            </button>
+                            <button class="nav-link text-start mb-2" id="tab-projects" data-bs-toggle="pill" data-bs-target="#panel-projects" type="button" role="tab" onclick="loadProjects()">
+                                <i class="bi bi-briefcase me-2"></i> Projects
+                            </button>
+
+                            <button class="nav-link text-start mb-2" id="tab-faqs" data-bs-toggle="pill" data-bs-target="#panel-faqs" type="button" role="tab" onclick="loadFaqs()">
+                                <i class="bi bi-question-circle me-2"></i> FAQs
+                            </button>
+                            <button class="nav-link text-start mb-2" id="tab-quotes" data-bs-toggle="pill" data-bs-target="#panel-quotes" type="button" role="tab" onclick="loadQuotes()">
+                                <i class="bi bi-envelope-check me-2"></i> Leads / Quotes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Panels -->
+                <div class="col-lg-9">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        
+                        <!-- Panel: Overview -->
+                        <div class="tab-pane fade show active" id="panel-overview" role="tabpanel">
+                            <h2 class="mb-4 font-bold text-dark">Analytics Overview</h2>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="p-4 shadow border rounded-4 bg-white bg-custom-1 card-stat">
+                                        <h6 class="text-secondary text-uppercase mb-2 fs-8">Total Page Views</h6>
+                                        <h2 class="font-bold text-primary mb-0" id="stat-views">0</h2>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="p-4 shadow border rounded-4 bg-white bg-custom-1 card-stat">
+                                        <h6 class="text-secondary text-uppercase mb-2 fs-8">Inquiries Received</h6>
+                                        <h2 class="font-bold text-primary mb-0" id="stat-quotes">0</h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Page Views Table -->
+                            <div class="p-4 shadow border rounded-4 bg-white bg-custom-1 mt-5">
+                                <h4 class="mb-4 font-bold text-dark">Page Views Breakdown</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>Page URL</th>
+                                                <th>Views Count</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="viewsTableBody">
+                                            <tr><td colspan="2" class="text-center text-secondary">No analytics recorded yet.</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel: Projects -->
+                        <div class="tab-pane fade" id="panel-projects" role="tabpanel">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h2 class="font-bold text-dark m-0">Manage Projects</h2>
+                                <button class="btn btn-primary py-2 px-4 fs-7" data-bs-toggle="modal" data-bs-target="#projectModal" onclick="openAddProject()">
+                                    <i class="bi bi-plus-circle me-1"></i> Add Project
+                                </button>
+                            </div>
+                            <div class="table-responsive p-4 shadow border rounded-4 bg-white bg-custom-1">
+                                <table class="table table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Title</th>
+                                            <th>Category</th>
+                                            <th>Client</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="projectsTableBody">
+                                        <tr><td colspan="5" class="text-center">Loading projects...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Panel: FAQs -->
+                        <div class="tab-pane fade" id="panel-faqs" role="tabpanel">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h2 class="font-bold text-dark m-0">Manage FAQs</h2>
+                                <button class="btn btn-primary py-2 px-4 fs-7" data-bs-toggle="modal" data-bs-target="#faqModal" onclick="openAddFaq()">
+                                    <i class="bi bi-plus-circle me-1"></i> Add FAQ
+                                </button>
+                            </div>
+                            <div class="table-responsive p-4 shadow border rounded-4 bg-white bg-custom-1">
+                                <table class="table table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Question</th>
+                                            <th>Answer</th>
+                                            <th>Order</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="faqsTableBody">
+                                        <tr><td colspan="4" class="text-center">Loading FAQs...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Panel: Quotes / Inquiries -->
+                        <div class="tab-pane fade" id="panel-quotes" role="tabpanel">
+                            <h2 class="mb-4 font-bold text-dark">Quotes & Lead Inquiries</h2>
+                            <div class="table-responsive p-4 shadow border rounded-4 bg-white bg-custom-1">
+                                <table class="table table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Contact Detail</th>
+                                            <th>Subject / Type</th>
+                                            <th>Budget</th>
+                                            <th>Description</th>
+                                            <th>Submitted On</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="quotesTableBody">
+                                        <tr><td colspan="5" class="text-center">Loading leads...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Project -->
+    <div class="modal fade" id="projectModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content rounded-4 bg-white bg-custom-1 border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title font-bold text-dark" id="projectModalTitle">Add Project</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="projectForm">
+                    <input type="hidden" id="projectId" />
+                    <div class="modal-body py-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Title</label>
+                                <input type="text" id="projTitle" class="form-control rounded-3 border bg-secondary-1" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Category Tags (space-separated)</label>
+                                <input type="text" id="projCategory" class="form-control rounded-3 border bg-secondary-1" placeholder="ui-ux development products" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Client</label>
+                                <input type="text" id="projClient" class="form-control rounded-3 border bg-secondary-1" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Website Url</label>
+                                <input type="text" id="projWebsite" class="form-control rounded-3 border bg-secondary-1" placeholder="fushion.io" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Start Date</label>
+                                <input type="text" id="projStart" class="form-control rounded-3 border bg-secondary-1" placeholder="01 May 2024" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Complete Date</label>
+                                <input type="text" id="projComplete" class="form-control rounded-3 border bg-secondary-1" placeholder="01 June 2024" />
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label text-dark fw-bold">Services</label>
+                                <input type="text" id="projServices" class="form-control rounded-3 border bg-secondary-1" placeholder="UI/UX Design, Development" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Main Image</label>
+                                <input type="file" id="projImageFile" accept="image/*" class="form-control rounded-3 border bg-secondary-1 mb-2" />
+                                <input type="text" id="projImage" class="form-control rounded-3 border bg-secondary-1 fs-8" value="assets/imgs/background/img-portfolio-5.png" required readonly placeholder="Uploaded path will appear here" />
+                                <div id="projImagePreview" class="mt-2 text-start" style="display: none;">
+                                    <img src="" class="img-thumbnail" style="max-height: 120px;" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Gallery Images</label>
+                                <input type="file" id="projGalleryFile" accept="image/*" class="form-control rounded-3 border bg-secondary-1 mb-2" multiple />
+                                <input type="text" id="projGallery" class="form-control rounded-3 border bg-secondary-1 fs-8" placeholder="Uploaded paths will appear here" readonly />
+                                <div id="projGalleryPreview" class="mt-2 d-flex flex-wrap gap-2"></div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 py-1 px-2 fs-9" id="clearGalleryBtn" style="display: none;">Clear Gallery</button>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label text-dark fw-bold">Description</label>
+                                <textarea id="projDesc" class="form-control rounded-3 border bg-secondary-1" rows="4" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-secondary py-2 px-4 fs-7" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary py-2 px-4 fs-7">Save Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal: FAQ -->
+    <div class="modal fade" id="faqModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4 bg-white bg-custom-1 border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title font-bold text-dark" id="faqModalTitle">Add FAQ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="faqForm">
+                    <input type="hidden" id="faqId" />
+                    <div class="modal-body py-4">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label class="form-label text-dark fw-bold">Question</label>
+                                <input type="text" id="faqQuestion" class="form-control rounded-3 border bg-secondary-1" required />
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label text-dark fw-bold">Answer</label>
+                                <textarea id="faqAnswer" class="form-control rounded-3 border bg-secondary-1" rows="4" required></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label text-dark fw-bold">Sort Order</label>
+                                <input type="number" id="faqOrder" class="form-control rounded-3 border bg-secondary-1" value="0" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-secondary py-2 px-4 fs-7" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary py-2 px-4 fs-7">Save FAQ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Libs JS -->
+    <script src="assets/js/vendors/jquery-3.7.1.min.js"></script>
+    <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/vendors/swiper-bundle.min.js"></script>
+    <script src="assets/js/vendors/aos.js"></script>
+    <script src="assets/js/vendors/wow.min.js"></script>
+    <script src="assets/js/vendors/jquery.appear.js"></script>
+    <script src="assets/js/vendors/jquery.odometer.min.js"></script>
+    <script src="assets/js/vendors/headhesive.min.js"></script>
+    <script src="assets/js/vendors/smart-stick-nav.js"></script>
+    <script src="assets/js/vendors/jquery.magnific-popup.min.js"></script>
+    <script src="assets/js/vendors/gsap.min.js"></script>
+    <script src="assets/js/vendors/ScrollToPlugin.min.js"></script>
+    <script src="assets/js/vendors/ScrollTrigger.min.js"></script>
+    <script src="assets/js/vendors/custom-cursor.js"></script>
+    <script src="assets/js/vendors/jquery.carouselTicker.min.js"></script>
+    <script src="assets/js/vendors/imagesloaded.pkgd.min.js"></script>
+    <script src="assets/js/vendors/isotope.pkgd.min.js"></script>
+    <script src="assets/js/gsap-custom.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <!-- Admin dashboard operations wiring -->
+    <script>
+        let bootstrapModal;
+
+        // Check authentication on load
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('/api/auth/me');
+                if (!res.ok) {
+                    window.location.href = '/login';
+                    return;
+                }
+                
+                // Show content if authenticated
+                document.getElementById('authSpinner').classList.add('d-none');
+                document.getElementById('dashboardContent').classList.remove('d-none');
+                
+                loadOverviewStats();
+            } catch (err) {
+                window.location.href = '/login';
+            }
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/login';
+        });
+
+        // 1. Overview Section
+        async function loadOverviewStats() {
+            try {
+                const res = await fetch('/api/analytics/summary');
+                const data = await res.json();
+
+                document.getElementById('stat-views').textContent = data.totalViews || 0;
+                document.getElementById('stat-quotes').textContent = data.totalQuotes || 0;
+
+                const tbody = document.getElementById('viewsTableBody');
+                if (data.viewsByPage && data.viewsByPage.length > 0) {
+                    tbody.innerHTML = '';
+                    data.viewsByPage.forEach(v => {
+                        tbody.insertAdjacentHTML('beforeend', `
+                            <tr>
+                                <td class="text-dark fw-medium">${v.pageUrl}</td>
+                                <td><span class="badge bg-success py-2 px-3 rounded-pill">${v.count} views</span></td>
+                            </tr>
+                        `);
+                    });
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // 2. Manage Projects Section
+        async function loadProjects() {
+            const tbody = document.getElementById('projectsTableBody');
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center">Loading projects...</td></tr>';
+
+            try {
+                const res = await fetch('/api/projects');
+                const { projects } = await res.json();
+                
+                tbody.innerHTML = '';
+                if (projects && projects.length > 0) {
+                    projects.forEach(p => {
+                        tbody.insertAdjacentHTML('beforeend', `
+                            <tr>
+                                <td><img src="${p.imageUrl}" width="60" class="rounded-3" /></td>
+                                <td class="text-dark fw-bold">${p.title}</td>
+                                <td><span class="badge bg-secondary py-1 px-2 fs-9 text-uppercase">${p.category}</span></td>
+                                <td>${p.client || 'N/A'}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditProject('${p.id}')"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteProject('${p.id}')"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-secondary">No projects configured.</td></tr>';
+                }
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error loading projects.</td></tr>';
+            }
+        }
+
+        function openAddProject() {
+            document.getElementById('projectModalTitle').textContent = 'Add Project';
+            document.getElementById('projectForm').reset();
+            document.getElementById('projectId').value = '';
+            
+            // Reset files & previews
+            document.getElementById('projImageFile').value = '';
+            document.getElementById('projGalleryFile').value = '';
+            updateMainImagePreview('');
+            updateGalleryPreviews('');
+
+            bootstrapModal = new bootstrap.Modal(document.getElementById('projectModal'));
+        }
+
+        async function openEditProject(id) {
+            document.getElementById('projectModalTitle').textContent = 'Edit Project';
+            document.getElementById('projectId').value = id;
+
+            // Reset files
+            document.getElementById('projImageFile').value = '';
+            document.getElementById('projGalleryFile').value = '';
+
+            const res = await fetch(`/api/projects/${id}`);
+            const { project } = await res.json();
+
+            document.getElementById('projTitle').value = project.title;
+            document.getElementById('projCategory').value = project.category;
+            document.getElementById('projClient').value = project.client || '';
+            document.getElementById('projWebsite').value = project.website || '';
+            document.getElementById('projStart').value = project.startDate || '';
+            document.getElementById('projComplete').value = project.completeDate || '';
+            document.getElementById('projServices').value = project.services || '';
+            document.getElementById('projImage').value = project.imageUrl;
+            document.getElementById('projGallery').value = project.gallery || '';
+            document.getElementById('projDesc').value = project.description;
+
+            // Update previews
+            updateMainImagePreview(project.imageUrl);
+            updateGalleryPreviews(project.gallery || '');
+
+            bootstrapModal = new bootstrap.Modal(document.getElementById('projectModal'));
+            bootstrapModal.show();
+        }
+
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('projectId').value;
+
+            const payload = {
+                title: document.getElementById('projTitle').value,
+                category: document.getElementById('projCategory').value,
+                client: document.getElementById('projClient').value,
+                website: document.getElementById('projWebsite').value,
+                startDate: document.getElementById('projStart').value,
+                completeDate: document.getElementById('projComplete').value,
+                services: document.getElementById('projServices').value,
+                imageUrl: document.getElementById('projImage').value,
+                gallery: document.getElementById('projGallery').value,
+                description: document.getElementById('projDesc').value
+            };
+
+            const url = id ? `/api/projects/${id}` : '/api/projects';
+            const method = id ? 'PUT' : 'POST';
+
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                bootstrapModal.hide();
+                // Close modal overlay manually if needed
+                document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+                loadProjects();
+            } else {
+                alert('Failed to save project.');
+            }
+        });
+
+        async function deleteProject(id) {
+            if (confirm('Are you sure you want to delete this project?')) {
+                await fetch(`/api/projects/${id}`, { method: 'DELETE' });
+                loadProjects();
+            }
+        }
+
+
+
+        // 4. Manage FAQs Section
+        async function loadFaqs() {
+            const tbody = document.getElementById('faqsTableBody');
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center">Loading FAQs...</td></tr>';
+
+            try {
+                const res = await fetch('/api/faqs');
+                const { faqs } = await res.json();
+
+                tbody.innerHTML = '';
+                if (faqs && faqs.length > 0) {
+                    faqs.forEach(f => {
+                        tbody.insertAdjacentHTML('beforeend', `
+                            <tr>
+                                <td class="text-dark fw-bold w-25">${f.question}</td>
+                                <td class="text-secondary w-50">${f.answer}</td>
+                                <td>${f.order}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditFaq('${f.id}')"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteFaq('${f.id}')"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-secondary">No FAQs configures.</td></tr>';
+                }
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading FAQs.</td></tr>';
+            }
+        }
+
+        function openAddFaq() {
+            document.getElementById('faqModalTitle').textContent = 'Add FAQ';
+            document.getElementById('faqForm').reset();
+            document.getElementById('faqId').value = '';
+            bootstrapModal = new bootstrap.Modal(document.getElementById('faqModal'));
+        }
+
+        async function openEditFaq(id) {
+            document.getElementById('faqModalTitle').textContent = 'Edit FAQ';
+            document.getElementById('faqId').value = id;
+
+            const res = await fetch('/api/faqs');
+            const { faqs } = await res.json();
+            const faq = faqs.find(item => item.id === id);
+
+            document.getElementById('faqQuestion').value = faq.question;
+            document.getElementById('faqAnswer').value = faq.answer;
+            document.getElementById('faqOrder').value = faq.order;
+
+            bootstrapModal = new bootstrap.Modal(document.getElementById('faqModal'));
+            bootstrapModal.show();
+        }
+
+        document.getElementById('faqForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('faqId').value;
+
+            const payload = {
+                question: document.getElementById('faqQuestion').value,
+                answer: document.getElementById('faqAnswer').value,
+                order: parseInt(document.getElementById('faqOrder').value)
+            };
+
+            const url = id ? `/api/faqs/${id}` : '/api/faqs';
+            const method = id ? 'PUT' : 'POST';
+
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                bootstrapModal.hide();
+                document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+                loadFaqs();
+            } else {
+                alert('Failed to save FAQ.');
+            }
+        });
+
+        async function deleteFaq(id) {
+            if (confirm('Are you sure you want to delete this FAQ?')) {
+                await fetch(`/api/faqs/${id}`, { method: 'DELETE' });
+                loadFaqs();
+            }
+        }
+
+        // 5. Manage Quotes Section
+        async function loadQuotes() {
+            const tbody = document.getElementById('quotesTableBody');
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center">Loading leads...</td></tr>';
+
+            try {
+                const res = await fetch('/api/quotes');
+                const { quotes } = await res.json();
+
+                tbody.innerHTML = '';
+                if (quotes && quotes.length > 0) {
+                    quotes.forEach(q => {
+                        tbody.insertAdjacentHTML('beforeend', `
+                            <tr>
+                                <td>
+                                    <div class="fw-bold text-dark">${q.name}</div>
+                                    <div class="small text-secondary">${q.email}</div>
+                                    <div class="small text-secondary">${q.phone || ''}</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-dark py-1 px-2 text-uppercase fs-9 mb-1">${q.type}</span>
+                                    <div class="fw-bold text-dark">${q.subject || ''}</div>
+                                </td>
+                                <td><span class="badge bg-success py-1 px-2 rounded-pill fs-8">${q.budget}</span></td>
+                                <td><p class="mb-0 fs-8 text-secondary" style="max-width: 250px; white-space: pre-wrap;">${q.description}</p></td>
+                                <td><span class="fs-8">${new Date(q.createdAt).toLocaleString()}</span></td>
+                            </tr>
+                        `);
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-secondary">No leads received yet.</td></tr>';
+                }
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error loading leads.</td></tr>';
+            }
+        }
+
+        // Image Previews and Asynchronous Upload Helpers
+        function updateMainImagePreview(url) {
+            const previewContainer = document.getElementById('projImagePreview');
+            if (url) {
+                previewContainer.style.display = 'block';
+                previewContainer.innerHTML = `<img src="${url}" class="img-thumbnail" style="max-height: 120px;" />`;
+            } else {
+                previewContainer.style.display = 'none';
+                previewContainer.innerHTML = '';
+            }
+        }
+
+        function updateGalleryPreviews(galleryStr) {
+            const previewContainer = document.getElementById('projGalleryPreview');
+            const clearBtn = document.getElementById('clearGalleryBtn');
+            previewContainer.innerHTML = '';
+            
+            if (galleryStr) {
+                const urls = galleryStr.split(',');
+                urls.forEach(url => {
+                    if (url) {
+                        const img = document.createElement('img');
+                        img.src = url;
+                        img.className = 'img-thumbnail';
+                        img.style.maxHeight = '60px';
+                        img.style.maxWidth = '60px';
+                        previewContainer.appendChild(img);
+                    }
+                });
+                if (clearBtn) clearBtn.style.display = 'inline-block';
+            } else {
+                if (clearBtn) clearBtn.style.display = 'none';
+            }
+        }
+
+        // Clear Gallery Button Listener
+        document.getElementById('clearGalleryBtn').addEventListener('click', () => {
+            document.getElementById('projGallery').value = '';
+            updateGalleryPreviews('');
+        });
+
+        // Main Image upload trigger
+        document.getElementById('projImageFile').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Show temporary loading indicator
+            const previewContainer = document.getElementById('projImagePreview');
+            previewContainer.style.display = 'block';
+            previewContainer.innerHTML = `<div class="spinner-border spinner-border-sm text-primary animate-spin" role="status"><span class="visually-hidden">Loading...</span></div> Uploading...`;
+
+            try {
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    document.getElementById('projImage').value = data.url;
+                    updateMainImagePreview(data.url);
+                } else {
+                    alert(data.error || 'Upload failed');
+                    updateMainImagePreview(document.getElementById('projImage').value);
+                }
+            } catch (err) {
+                alert('Upload failed due to connection error.');
+                updateMainImagePreview(document.getElementById('projImage').value);
+            }
+        });
+
+        // Gallery Images upload trigger
+        document.getElementById('projGalleryFile').addEventListener('change', async (e) => {
+            const files = e.target.files;
+            if (!files || files.length === 0) return;
+
+            const previewContainer = document.getElementById('projGalleryPreview');
+            previewContainer.innerHTML = `<div class="spinner-border spinner-border-sm text-primary animate-spin" role="status"><span class="visually-hidden">Loading...</span></div> Uploading ${files.length} images...`;
+
+            const uploadedUrls = [];
+            
+            for (let i = 0; i < files.length; i++) {
+                const formData = new FormData();
+                formData.append('file', files[i]);
+                try {
+                    const res = await fetch('/api/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        uploadedUrls.push(data.url);
+                    }
+                } catch (err) {
+                    console.error('Error uploading file:', err);
+                }
+            }
+
+            if (uploadedUrls.length > 0) {
+                const currentGallery = document.getElementById('projGallery').value;
+                const newGalleryList = currentGallery ? currentGallery.split(',').concat(uploadedUrls) : uploadedUrls;
+                const finalGalleryStr = newGalleryList.filter(u => u).join(',');
+                
+                document.getElementById('projGallery').value = finalGalleryStr;
+                updateGalleryPreviews(finalGalleryStr);
+            } else {
+                alert('All uploads failed.');
+                updateGalleryPreviews(document.getElementById('projGallery').value);
+            }
+            // Clear file input
+            e.target.value = '';
+        });
+</script>
+</body>
+
+</html>
