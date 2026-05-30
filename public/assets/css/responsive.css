@@ -1,0 +1,311 @@
+/* Inexa Custom Responsive Overrides */
+
+/* Global Reset to prevent horizontal scrolling */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  position: relative;
+}
+
+/* Hide custom magic cursors on touch screens (tablet and mobile) */
+@media (max-width: 991.98px) {
+  .cursor, .follower {
+    display: none !important;
+  }
+  body.magic-cursor, body.magic-cursor2 {
+    cursor: auto !important;
+  }
+}
+
+/* Fluid display headings typography */
+@media (max-width: 991.98px) {
+  .ds-1 { font-size: 4rem !important; }
+  .ds-2 { font-size: 3.2rem !important; }
+  .ds-3 { font-size: 2.8rem !important; }
+  .ds-4 { font-size: 2.4rem !important; }
+  .ds-5 { font-size: 2rem !important; }
+  .ds-6 { font-size: 1.6rem !important; }
+  .ds-xs-4 { font-size: 1.6rem !important; }
+  
+  /* Large display typography helpers */
+  .fs-250 { font-size: 110px !important; }
+  .fs-230 { font-size: 100px !important; }
+  .fs-120 { font-size: 65px !important; }
+  .fs-170 { 
+    font-size: 6.5vw !important;
+    word-break: break-all !important;
+    overflow-wrap: break-word !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .ds-1 { font-size: 2.8rem !important; }
+  .ds-2 { font-size: 2.3rem !important; }
+  .ds-3 { font-size: 2rem !important; }
+  .ds-4 { font-size: 1.7rem !important; }
+  .ds-5 { font-size: 1.5rem !important; }
+  .ds-6 { font-size: 1.3rem !important; }
+  .ds-xs-4 { font-size: 1.3rem !important; }
+  .ds-xs-6 { font-size: 1.2rem !important; }
+  
+  .fs-250 { font-size: 70px !important; }
+  .fs-230 { font-size: 65px !important; }
+  .fs-120 { font-size: 40px !important; }
+  .fs-170 { 
+    font-size: 7.8vw !important;
+    word-break: break-all !important;
+    overflow-wrap: break-word !important;
+    padding-bottom: 20px !important;
+  }
+}
+
+/* Home Section 1: Hero Section Layout Overlapping */
+@media (max-width: 991.98px) {
+  .home1_section1 {
+    padding-top: 110px !important;
+    padding-bottom: 50px !important;
+    height: auto !important;
+    min-height: auto !important;
+  }
+  .home1_section1 .container {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  
+  /* Stack human graphic element vertically */
+  .home1_section1 .text-end.position-absolute {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    end: auto !important;
+    margin-top: 25px !important;
+    margin-bottom: 25px !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+  .home1_section1 .parallax-item img {
+    max-width: 75% !important;
+    height: auto !important;
+    margin: 0 auto;
+  }
+  
+  /* Stack text subtitle and CV button */
+  .home1_section1 .d-flex.position-absolute {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-top: 20px !important;
+    gap: 20px !important;
+  }
+  .home1_section1 .d-flex.position-absolute .text-start {
+    text-align: center !important;
+  }
+  .home1_section1 .d-flex.position-absolute .position-absolute {
+    position: relative !important;
+    top: auto !important;
+    end: auto !important;
+  }
+  
+  /* Stroke text banner headers */
+  .stroke_light_lg, .stroke_dark_lg {
+    font-size: 7.5vw !important;
+    line-height: 1.1 !important;
+    white-space: normal !important;
+    text-align: center !important;
+    display: block !important;
+  }
+  .scroll-move-left .d-flex {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .home1_section1 {
+    padding-top: 95px !important;
+  }
+  .home1_section1 .parallax-item img {
+    max-width: 90% !important;
+  }
+  .stroke_light_lg, .stroke_dark_lg {
+    font-size: 9.5vw !important;
+  }
+}
+
+/* Home Section 2: About Image Badge Positioning */
+@media (max-width: 991.98px) {
+  .home1_section2 .zoom-img {
+    max-width: 100% !important;
+    display: flex;
+    justify-content: center;
+  }
+  .home1_section2 .col-lg-6 .d-inline-flex {
+    width: 100%;
+    justify-content: center;
+  }
+  .home1_section2 .position-absolute.bottom-0.start-100 {
+    start: 85% !important;
+    transform: translate(-50%, 25%) !important;
+  }
+}
+@media (max-width: 575.98px) {
+  .home1_section2 .position-absolute.bottom-0.start-100 {
+    start: 50% !important;
+    transform: translate(-50%, 40%) !important;
+  }
+  .home1_section2 .icon_160 {
+    width: 120px !important;
+    height: 120px !important;
+  }
+  .home1_section2 .icon_160 img.position-relative {
+    width: 35px !important;
+  }
+}
+
+/* Fixed-Width Brand boxes fluid adaptation */
+@media (max-width: 767.98px) {
+  .brand.box-320 {
+    width: 100% !important;
+    max-width: 280px !important;
+    height: auto !important;
+    aspect-ratio: 1.1/1 !important;
+    margin: 10px auto !important;
+    display: inline-flex !important;
+  }
+  .brand_item.box-300 {
+    width: 100% !important;
+    max-width: 260px !important;
+    height: auto !important;
+    aspect-ratio: 1.1/1 !important;
+    margin: 0 auto !important;
+  }
+}
+
+/* Awards Section overlapping list adjustments */
+@media (max-width: 991.98px) {
+  .awards {
+    padding-right: 90px !important;
+  }
+}
+@media (max-width: 575.98px) {
+  .awards {
+    padding-right: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .awards img {
+    position: static !important;
+    margin-top: 15px !important;
+    max-width: 70px !important;
+    align-self: flex-start !important;
+  }
+}
+
+/* Budget Selector wrapping on small viewports */
+@media (max-width: 767.98px) {
+  .select-budget {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+  .select-budget p {
+    width: 100% !important;
+    margin-bottom: 5px !important;
+  }
+}
+
+/* Card layout padding constraints for Forms (Login / Quotes) */
+@media (max-width: 575.98px) {
+  .p-md-8, .p-6, .p-5 {
+    padding: 1.5rem !important;
+  }
+}
+
+/* Portfolio Details pagination buttons overlapping fixes */
+@media (max-width: 575.98px) {
+  .d-flex.justify-content-between.align-items-center.border.p-4 {
+    flex-direction: column !important;
+    gap: 15px !important;
+    text-align: center !important;
+  }
+  .d-flex.justify-content-between.align-items-center.border.p-4 .d-flex {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 5px !important;
+  }
+  .d-flex.justify-content-between.align-items-center.border.p-4 .d-flex h5 {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* Client Details row columns inside portfolio details */
+@media (max-width: 767.98px) {
+  .row.wow.img-custom-anim-top .col-lg-8 .row {
+    flex-wrap: wrap !important;
+  }
+  .row.wow.img-custom-anim-top .col-lg-8 .row > .col {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    margin-bottom: 20px !important;
+  }
+}
+@media (max-width: 479.98px) {
+  .row.wow.img-custom-anim-top .col-lg-8 .row > .col {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Mobile Sidebar Selector in Admin Dashboard */
+@media (max-width: 991.98px) {
+  .admin-sidebar {
+    min-height: auto !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding-bottom: 15px !important;
+    margin-bottom: 25px !important;
+  }
+  [data-bs-theme="dark"] .admin-sidebar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .admin-sidebar .nav-pills {
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+    padding-bottom: 10px !important;
+    scrollbar-width: none !important; /* Firefox */
+  }
+  .admin-sidebar .nav-pills::-webkit-scrollbar {
+    display: none !important; /* Chrome / Safari */
+  }
+  .admin-sidebar .nav-pills .nav-link {
+    white-space: nowrap !important;
+    margin-bottom: 0 !important;
+    flex: 0 0 auto !important;
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* General spacing improvements */
+@media (max-width: 767.98px) {
+  .section-padding {
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+  }
+  .pb-120 {
+    padding-bottom: 60px !important;
+  }
+  .pt-120 {
+    padding-top: 60px !important;
+  }
+}
