@@ -2,6 +2,7 @@ import prisma from '../../../lib/prisma';
 import { getSessionUser } from '../../../lib/auth';
 import { sendEmail } from '../../../lib/email';
 import { isRateLimited } from '../../../lib/rateLimit';
+import { appendInquiry } from '../../../lib/googleSheets';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -35,7 +36,7 @@ export async function POST(request) {
       }, { status: 429 });
     }
 
-    const { name, email, phone, subject, description, budget, type } = await request.json();
+    const { name, email, phone, subject, description, budget, type, company } = await request.json();
 
     if (!name || !email || !description) {
       return NextResponse.json({ error: 'Name, email, and description are required fields.' }, { status: 400 });
@@ -68,6 +69,7 @@ You have received a new project inquiry!
 Name: ${quote.name}
 Email: ${quote.email}
 Phone: ${quote.phone || 'N/A'}
+Company: ${company || 'N/A'}
 Budget Selected: ${quote.budget}
 Inquiry Type: ${quote.type}
 
@@ -84,9 +86,20 @@ Received on: ${quote.createdAt.toString()}
       text: emailText
     }).catch(e => console.error('Background email dispatch failed:', e));
 
+    // 3. Append to Google Sheets in background (do not block client response)
+    appendInquiry({
+      ...quote,
+      company: company || 'N/A'
+    }).then(data => {
+      console.log('Google Sheets entry added successfully:', data);
+    }).catch(err => {
+      console.error('Google Sheets append failed in background:', err.message);
+    });
+
     return NextResponse.json({ success: true, quote }, { status: 201 });
   } catch (error) {
     console.error('Create quote error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
