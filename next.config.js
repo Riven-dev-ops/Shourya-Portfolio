@@ -59,9 +59,14 @@ const nextConfig = {
         source: '/login',
         destination: '/login.html',
       },
+      {
+        source: '/admin',
+        destination: '/admin.html',
+      },
     ];
   },
 };
+
 
 export default nextConfig;
 
