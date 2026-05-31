@@ -18,11 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
     <!-- Chat Card Window -->
     <div class="chat-window" id="chatWindow">
       <div class="chat-header">
-        <img src="assets/imgs/avatar/chatbot-avatar.png" alt="Inexa AI" />
-        <div class="agent-info">
-          <h5>Inexa Assistant</h5>
-          <span>Online</span>
+        <div class="agent-profile">
+          <img src="assets/imgs/avatar/chatbot-avatar.png" alt="Inexa AI" />
+          <div class="agent-info">
+            <h5>Inexa Assistant</h5>
+            <span>Online</span>
+          </div>
         </div>
+        <button class="chat-close-btn" id="chatCloseBtn" aria-label="Close Chat">
+          <i class="bi bi-x-lg"></i>
+        </button>
       </div>
       <div class="chat-messages" id="chatMessages">
         <div class="message-bubble bot">
@@ -55,20 +60,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputEl = document.getElementById('chatInput');
   const sendBtn = document.getElementById('chatSendBtn');
 
-  // Toggle Visibility
-  launcher.addEventListener('click', () => {
-    windowCard.classList.toggle('active');
-    launcher.classList.toggle('active');
+  // Toggle Visibility Helper
+  function toggleChat(forceClose = false) {
+    const isActive = windowCard.classList.contains('active');
+    const shouldClose = forceClose || isActive;
     
-    // Icon toggling
-    const icon = launcher.querySelector('i');
-    if (launcher.classList.contains('active')) {
-      icon.className = 'bi bi-x-lg';
-      inputEl.focus();
+    if (shouldClose) {
+      windowCard.classList.remove('active');
+      launcher.classList.remove('active');
+      launcher.querySelector('i').className = 'bi bi-chat-dots-fill';
     } else {
-      icon.className = 'bi bi-chat-dots-fill';
+      windowCard.classList.add('active');
+      launcher.classList.add('active');
+      launcher.querySelector('i').className = 'bi bi-x-lg';
+      setTimeout(() => inputEl.focus(), 100);
     }
-  });
+  }
+
+  // Toggle Visibility Events
+  launcher.addEventListener('click', () => toggleChat());
+  
+  const closeBtn = document.getElementById('chatCloseBtn');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleChat(true);
+    });
+  }
 
   // Handle Send Message
   async function sendMessage(customText) {

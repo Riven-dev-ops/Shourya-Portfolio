@@ -69,7 +69,6 @@
 		if ($(".tcmenu__wrap li.menu-item-has-children ul").length) {
 			$(".tcmenu__wrap .navigation li.menu-item-has-children").append('<div class="dropdown-btn"><span class="plus-line"></span></div>');
 		}
-		//Mobile Nav Hide Show
 		if ($(".tcmobile__menu").length) {
 			var mobileMenuContent = $(".tcmenu__wrap .tcmenu__main-menu").html();
 			$(".tcmobile__menu .tcmobile__menu-box .tcmobile__menu-outer").append(mobileMenuContent);
@@ -84,6 +83,10 @@
 			});
 			//Menu Toggle Btn
 			$(".tcmobile__menu-backdrop, .tcmobile__menu .close-btn").on("click", function () {
+				$("body").removeClass("mobile-menu-visible");
+			});
+			// Close mobile menu when any link inside is clicked
+			$(".tcmobile__menu .tcmobile__menu-box .tcmobile__menu-outer a").on("click", function () {
 				$("body").removeClass("mobile-menu-visible");
 			});
 		}
