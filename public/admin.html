@@ -370,6 +370,22 @@
                 .replace(/'/g, '&#39;');
         }
 
+        // Helper to split gallery images safely handling base64 data URLs
+        function splitGallery(galleryStr) {
+            if (!galleryStr) return [];
+            const urls = [];
+            const parts = galleryStr.split(',');
+            for (let i = 0; i < parts.length; i++) {
+                let part = parts[i];
+                if (part.startsWith('data:') && part.includes(';base64') && i + 1 < parts.length) {
+                    part = part + ',' + parts[i + 1];
+                    i++;
+                }
+                urls.push(part);
+            }
+            return urls.filter(Boolean);
+        }
+
         let bootstrapModal;
 
         // Check authentication on load
@@ -690,7 +706,7 @@
             previewContainer.innerHTML = '';
             
             if (galleryStr) {
-                const urls = galleryStr.split(',');
+                const urls = splitGallery(galleryStr);
                 urls.forEach(url => {
                     if (url) {
                         const img = document.createElement('img');
@@ -775,7 +791,7 @@
 
             if (uploadedUrls.length > 0) {
                 const currentGallery = document.getElementById('projGallery').value;
-                const newGalleryList = currentGallery ? currentGallery.split(',').concat(uploadedUrls) : uploadedUrls;
+                const newGalleryList = currentGallery ? splitGallery(currentGallery).concat(uploadedUrls) : uploadedUrls;
                 const finalGalleryStr = newGalleryList.filter(u => u).join(',');
                 
                 document.getElementById('projGallery').value = finalGalleryStr;

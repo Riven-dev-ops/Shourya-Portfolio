@@ -11,6 +11,22 @@ function escapeHTML(str) {
     .replace(/'/g, '&#39;');
 }
 
+// Helper to split gallery images safely handling base64 data URLs
+function splitGallery(galleryStr) {
+  if (!galleryStr) return [];
+  const urls = [];
+  const parts = galleryStr.split(',');
+  for (let i = 0; i < parts.length; i++) {
+    let part = parts[i];
+    if (part.startsWith('data:') && part.includes(';base64') && i + 1 < parts.length) {
+      part = part + ',' + parts[i + 1];
+      i++;
+    }
+    urls.push(part);
+  }
+  return urls.filter(Boolean);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Log Page View Analytics
   const pageUrl = window.location.pathname;
@@ -220,7 +236,7 @@ async function hydratePortfolioDetail() {
       const swiperWrapper = document.querySelector('.swiper.slider-6 .swiper-wrapper');
       if (swiperWrapper && project.gallery) {
         swiperWrapper.innerHTML = '';
-        const imgs = project.gallery.split(',');
+        const imgs = splitGallery(project.gallery);
         imgs.forEach(img => {
           swiperWrapper.insertAdjacentHTML('beforeend', `
             <div class="swiper-slide">
