@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSessionUser } from '../../../lib/auth';
+import prisma from '../../../lib/prisma';
 
 export async function POST(request) {
   try {
@@ -31,15 +32,22 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // 4. Convert file buffer to Base64 Data URL
+    // 4. Convert file buffer to Base64
     const buffer = Buffer.from(await file.arrayBuffer());
     const base64Data = buffer.toString('base64');
-    const dataUrl = `data:${file.type};base64,${base64Data}`;
 
-    // Return the Base64 URL path
+    // 5. Store file in PostgreSQL Asset table
+    const asset = await prisma.asset.create({
+      data: {
+        mimeType: file.type,
+        base64: base64Data
+      }
+    });
+
+    // Return the URL pointing to the new asset endpoint
     return NextResponse.json({ 
       success: true, 
-      url: dataUrl 
+      url: `/api/assets/${asset.id}` 
     });
   } catch (error) {
     console.error('File upload error:', error);

@@ -75,3 +75,12 @@ model ChatMessage {
   message   String
   timestamp DateTime @default(now())
 }
+
+// Uploaded media assets stored in database to bypass serverless disk & body limits
+model Asset {
+  id        String   @id @default(uuid())
+  mimeType  String
+  base64    String
+  createdAt DateTime @default(now())
+}
+
