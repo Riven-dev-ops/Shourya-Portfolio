@@ -359,6 +359,17 @@
 
     <!-- Admin dashboard operations wiring -->
     <script>
+        // Helper to escape HTML characters and prevent XSS
+        function escapeHTML(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         let bootstrapModal;
 
         // Check authentication on load
@@ -401,8 +412,8 @@
                     data.viewsByPage.forEach(v => {
                         tbody.insertAdjacentHTML('beforeend', `
                             <tr>
-                                <td class="text-dark fw-medium">${v.pageUrl}</td>
-                                <td><span class="badge bg-success py-2 px-3 rounded-pill">${v.count} views</span></td>
+                                <td class="text-dark fw-medium">${escapeHTML(v.pageUrl)}</td>
+                                <td><span class="badge bg-success py-2 px-3 rounded-pill">${escapeHTML(v.count)} views</span></td>
                             </tr>
                         `);
                     });
@@ -426,13 +437,13 @@
                     projects.forEach(p => {
                         tbody.insertAdjacentHTML('beforeend', `
                             <tr>
-                                <td><img src="${p.imageUrl}" width="60" class="rounded-3" /></td>
-                                <td class="text-dark fw-bold">${p.title}</td>
-                                <td><span class="badge bg-secondary py-1 px-2 fs-9 text-uppercase">${p.category}</span></td>
-                                <td>${p.client || 'N/A'}</td>
+                                <td><img src="${escapeHTML(p.imageUrl)}" width="60" class="rounded-3" /></td>
+                                <td class="text-dark fw-bold">${escapeHTML(p.title)}</td>
+                                <td><span class="badge bg-secondary py-1 px-2 fs-9 text-uppercase">${escapeHTML(p.category)}</span></td>
+                                <td>${escapeHTML(p.client || 'N/A')}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditProject('${p.id}')"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteProject('${p.id}')"><i class="bi bi-trash"></i></button>
+                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditProject('${escapeHTML(p.id)}')"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteProject('${escapeHTML(p.id)}')"><i class="bi bi-trash"></i></button>
                                 </td>
                             </tr>
                         `);
@@ -548,12 +559,12 @@
                     faqs.forEach(f => {
                         tbody.insertAdjacentHTML('beforeend', `
                             <tr>
-                                <td class="text-dark fw-bold w-25">${f.question}</td>
-                                <td class="text-secondary w-50">${f.answer}</td>
-                                <td>${f.order}</td>
+                                <td class="text-dark fw-bold w-25">${escapeHTML(f.question)}</td>
+                                <td class="text-secondary w-50">${escapeHTML(f.answer)}</td>
+                                <td>${escapeHTML(f.order)}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditFaq('${f.id}')"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteFaq('${f.id}')"><i class="bi bi-trash"></i></button>
+                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditFaq('${escapeHTML(f.id)}')"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteFaq('${escapeHTML(f.id)}')"><i class="bi bi-trash"></i></button>
                                 </td>
                             </tr>
                         `);
@@ -639,17 +650,17 @@
                         tbody.insertAdjacentHTML('beforeend', `
                             <tr>
                                 <td>
-                                    <div class="fw-bold text-dark">${q.name}</div>
-                                    <div class="small text-secondary">${q.email}</div>
-                                    <div class="small text-secondary">${q.phone || ''}</div>
+                                    <div class="fw-bold text-dark">${escapeHTML(q.name)}</div>
+                                    <div class="small text-secondary">${escapeHTML(q.email)}</div>
+                                    <div class="small text-secondary">${escapeHTML(q.phone || '')}</div>
                                 </td>
                                 <td>
-                                    <span class="badge bg-dark py-1 px-2 text-uppercase fs-9 mb-1">${q.type}</span>
-                                    <div class="fw-bold text-dark">${q.subject || ''}</div>
+                                    <span class="badge bg-dark py-1 px-2 text-uppercase fs-9 mb-1">${escapeHTML(q.type)}</span>
+                                    <div class="fw-bold text-dark">${escapeHTML(q.subject || '')}</div>
                                 </td>
-                                <td><span class="badge bg-success py-1 px-2 rounded-pill fs-8">${q.budget}</span></td>
-                                <td><p class="mb-0 fs-8 text-secondary" style="max-width: 250px; white-space: pre-wrap;">${q.description}</p></td>
-                                <td><span class="fs-8">${new Date(q.createdAt).toLocaleString()}</span></td>
+                                <td><span class="badge bg-success py-1 px-2 rounded-pill fs-8">${escapeHTML(q.budget)}</span></td>
+                                <td><p class="mb-0 fs-8 text-secondary" style="max-width: 250px; white-space: pre-wrap;">${escapeHTML(q.description)}</p></td>
+                                <td><span class="fs-8">${escapeHTML(new Date(q.createdAt).toLocaleString())}</span></td>
                             </tr>
                         `);
                     });

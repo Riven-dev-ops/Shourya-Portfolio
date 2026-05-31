@@ -1,4 +1,6 @@
 import { signToken } from '../../../../lib/auth';
+import prisma from '../../../../lib/prisma';
+import bcrypt from 'bcryptjs';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
@@ -10,12 +12,28 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
 
-    // Hardcoded admin check
-    if (email !== 'admin@inexa.com' || password !== 'admin123') {
+    // Lookup user in the database
+    const user = await prisma.user.findUnique({
+      where: { email }
+    });
+
+    if (!user) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    const token = signToken({ id: 'admin-id', email: 'admin@inexa.com', name: 'Alson Ori', role: 'ADMIN' });
+    // Verify password hash
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    }
+
+    // Generate JWT token
+    const token = signToken({ 
+      id: user.id, 
+      email: user.email, 
+      name: user.name || 'Alson Ori', 
+      role: user.role 
+    });
 
     const cookieStore = await cookies();
     cookieStore.set('auth_token', token, {
@@ -26,9 +44,13 @@ export async function POST(request) {
       path: '/'
     });
 
-    return NextResponse.json({ success: true, user: { email: 'admin@inexa.com', name: 'Alson Ori' } });
+    return NextResponse.json({ 
+      success: true, 
+      user: { email: user.email, name: user.name || 'Alson Ori' } 
+    });
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+

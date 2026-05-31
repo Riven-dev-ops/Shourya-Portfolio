@@ -1,5 +1,6 @@
 import prisma from '../../../lib/prisma';
 import { NextResponse } from 'next/server';
+import { isRateLimited } from '../../../lib/rateLimit';
 import Groq from 'groq-sdk';
 
 // Initialize Groq client
@@ -89,40 +90,6 @@ function containsSystemPromptLeak(response) {
   return hasDirectLeak || hasGeneralLeak;
 }
 
-const rateLimitMap = new Map();
-
-function isRateLimited(identifier, limit = 10, windowMs = 60000) {
-  const now = Date.now();
-  
-  // Dynamic cleanup: clean up expired entries from the map if it grows too large
-  if (rateLimitMap.size > 2000) {
-    for (const [key, timestamps] of rateLimitMap.entries()) {
-      const active = timestamps.filter(time => now - time < windowMs);
-      if (active.length === 0) {
-        rateLimitMap.delete(key);
-      } else {
-        rateLimitMap.set(key, active);
-      }
-    }
-  }
-
-  if (!rateLimitMap.has(identifier)) {
-    rateLimitMap.set(identifier, [now]);
-    return false;
-  }
-
-  const timestamps = rateLimitMap.get(identifier);
-  // Keep only active timestamps within the current sliding window
-  const activeTimestamps = timestamps.filter(time => now - time < windowMs);
-
-  if (activeTimestamps.length >= limit) {
-    return true;
-  }
-
-  activeTimestamps.push(now);
-  rateLimitMap.set(identifier, activeTimestamps);
-  return false;
-}
 
 export async function POST(request) {
   try {
