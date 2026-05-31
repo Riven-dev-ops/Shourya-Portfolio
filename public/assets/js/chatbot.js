@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div class="chat-messages" id="chatMessages">
         <div class="message-bubble bot">
-          Hello! I am Inexa AI, Alson Ori's virtual design assistant. Ask me anything about his work, rates, or services!
+          Hello! I am Inexa AI, Shourya Kumar's virtual design assistant. Ask me anything about his work, rates, or services!
         </div>
       </div>
       <!-- Suggested Questions -->

@@ -31,7 +31,7 @@ export async function POST(request) {
     const token = signToken({ 
       id: user.id, 
       email: user.email, 
-      name: user.name || 'Alson Ori', 
+      name: user.name || 'Shourya Kumar', 
       role: user.role 
     });
 
@@ -46,7 +46,7 @@ export async function POST(request) {
 
     return NextResponse.json({ 
       success: true, 
-      user: { email: user.email, name: user.name || 'Alson Ori' } 
+      user: { email: user.email, name: user.name || 'Shourya Kumar' } 
     });
   } catch (error) {
     console.error('Login error:', error);

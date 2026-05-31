@@ -30,7 +30,7 @@ Key details about Shourya Kumar:
   - Medium: $1k - $5k
   - Enterprise: $5k - $10k
 - Contact Information:
-  - Email: shourya.cyclist.com or shouryal3004@gmail.com
+  - Email: shourya.cyclist@gmail.com or shouryal3004@gmail.com
   - Phone: +91 6289056881
   - Address: Barrackpore, West Bengal, India
 - Pricing Plans:
@@ -38,7 +38,7 @@ Key details about Shourya Kumar:
   - Enterprise: $59/monthly
   - Business: $119/monthly
 
-Guide users to fill out the "Get Quote" page if they want to hire Alson.
+Guide users to fill out the "Get Quote" page if they want to hire Shourya.
 Keep your answers brief and directly related to his work, design style, and how to contact or hire him.
 `;
 
@@ -147,13 +147,13 @@ export async function POST(request) {
       if (lowerMsg.includes('hi') || lowerMsg.includes('hello')) {
         botResponse = "Hello! I am Inexa AI, Shourya Kumar's portfolio assistant. How can I help you discover his work today?";
       } else if (lowerMsg.includes('contact') || lowerMsg.includes('email') || lowerMsg.includes('phone')) {
-        botResponse = "You can contact Alson via email at hello@inexa.com or call him at +123 (456) 789 00. You can also send a lead through the Contact page!";
+        botResponse = "You can contact Shourya via email at shourya.cyclist@gmail.com or call him at +91 6289056881. You can also send a lead through the Contact page!";
       } else if (lowerMsg.includes('project') || lowerMsg.includes('work') || lowerMsg.includes('portfolio')) {
-        botResponse = "Alson has worked on major projects like the PixelPush App, Designo Pro App, and Foodie Finder. You can view them all on the Portfolios page!";
+        botResponse = "Shourya has worked on major projects like the PixelPush App, Designo Pro App, and Foodie Finder. You can view them all on the Portfolios page!";
       } else if (lowerMsg.includes('price') || lowerMsg.includes('cost') || lowerMsg.includes('budget') || lowerMsg.includes('rate')) {
-        botResponse = "Alson's project budgets range from $1k-$5k for small setups to $50k-$100k for enterprise design systems. Monthly team pricing starts at $49.";
+        botResponse = "Shourya's project budgets range from $1k-$5k for small setups to $5k-$10k for enterprise design systems. Monthly team pricing starts at $29.";
       } else {
-        botResponse = "I'm Inexa AI, Alson's portfolio assistant. To get a custom quote or hire him, feel free to navigate to the 'Get a Quote' page, or send an inquiry here!";
+        botResponse = "I'm Inexa AI, Shourya's portfolio assistant. To get a custom quote or hire him, feel free to navigate to the 'Get a Quote' page, or send an inquiry here!";
       }
     } else {
       // 2. Fetch past conversation history from database
@@ -202,7 +202,7 @@ export async function POST(request) {
     console.error('Chatbot API error:', error);
     // Graceful error fallback
     return NextResponse.json({ 
-      response: "Hello! It looks like my connection is a bit slow right now, but you can always reach Alson directly at hello@inexa.com!" 
+      response: "Hello! It looks like my connection is a bit slow right now, but you can always reach Shourya directly at shourya.cyclist@gmail.com!" 
     });
   }
 }
