@@ -84,3 +84,16 @@ model Asset {
   createdAt DateTime @default(now())
 }
 
+// Testimonials model
+model Testimonial {
+  id        String   @id @default(uuid())
+  name      String
+  role      String
+  company   String?
+  avatarUrl String
+  comment   String
+  rating    Int      @default(5)
+  createdAt DateTime @default(now())
+}
+
+

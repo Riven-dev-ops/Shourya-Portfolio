@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (isHomepage) {
     hydrateFAQs();
     hydratePortfolioList();
+    hydrateTestimonials();
 
     // Smooth scrolling for hash links on page load
     if (window.location.hash) {
@@ -305,3 +306,98 @@ function setupFormSubmissions() {
     });
   });
 }
+
+// 6. Hydrate Testimonials Slider
+async function hydrateTestimonials() {
+  const thumbsContainer = document.querySelector('.slider-1-thumb .swiper-wrapper');
+  const commentsContainer = document.querySelector('.slider-1 .swiper-wrapper');
+  if (!thumbsContainer || !commentsContainer) return;
+
+  try {
+    const res = await fetch('/api/testimonials');
+    const { testimonials } = await res.json();
+
+    if (testimonials && testimonials.length > 0) {
+      thumbsContainer.innerHTML = '';
+      commentsContainer.innerHTML = '';
+
+      testimonials.forEach((t) => {
+        // Thumbs (avatars)
+        const thumbHtml = `
+          <div class="swiper-slide">
+              <div class="avatar avatar-xl position-relative">
+                  <img class="rounded-circle" src="${escapeHTML(t.avatarUrl)}" alt="${escapeHTML(t.name)}" style="width: 80px; height: 80px; object-fit: cover;" />
+                  <div class="icon-shape icon-md rounded-circle position-absolute top-100 start-50 translate-middle">
+                      <img src="assets/imgs/icon/badge-icon-sm.png" alt="badge" />
+                  </div>
+              </div>
+          </div>
+        `;
+        thumbsContainer.insertAdjacentHTML('beforeend', thumbHtml);
+
+        // Stars HTML
+        let starsHtml = '';
+        for (let i = 0; i < t.rating; i++) {
+          starsHtml += '<i class="bi bi-star-fill text-primary"></i>\n';
+        }
+
+        // Company display
+        const displaySub = t.company ? `${escapeHTML(t.role)} &amp; ${escapeHTML(t.company)}` : escapeHTML(t.role);
+
+        // Comments
+        const commentHtml = `
+          <div class="swiper-slide">
+              <div class="review_comment">
+                  <div class="d-flex align-items-center">
+                      <a href="#">
+                          <h3>${escapeHTML(t.name)}</h3>
+                          <p class="text-primary fw-normal fs-7 text-uppercase mb-0">${displaySub}</p>
+                      </a>
+                      <div class="group_star">
+                          <div class="d-flex gap-1 align-items-center px-2 py-1 ms-4 border rounded-pill d-inline-flex">
+                              ${starsHtml}
+                          </div>
+                      </div>
+                  </div>
+                  <p class="ds-xs-4 text-black fw-bold border-top mt-5 pt-5">
+                      <span class="opacity-25">“</span>
+                      ${escapeHTML(t.comment)}
+                      <span class="opacity-25">”</span>
+                  </p>
+              </div>
+          </div>
+        `;
+        commentsContainer.insertAdjacentHTML('beforeend', commentHtml);
+      });
+
+      // Safely re-initialize Swiper for testimonials slider
+      if (typeof Swiper !== 'undefined') {
+        const thumbEl = document.querySelector(".slider-1-thumb");
+        const sliderEl = document.querySelector(".slider-1");
+        
+        // Destroy existing Swiper instances to allow re-initialization
+        if (thumbEl && thumbEl.swiper) thumbEl.swiper.destroy(true, true);
+        if (sliderEl && sliderEl.swiper) sliderEl.swiper.destroy(true, true);
+
+        const slider1Thumb = new Swiper(".slider-1-thumb", {
+          loop: true,
+          spaceBetween: 10,
+          slidesPerView: Math.min(testimonials.length, 3),
+          freeMode: true,
+          watchSlidesProgress: true,
+        });
+
+        new Swiper(".slider-1", {
+          spaceBetween: 10,
+          loop: true,
+          thumbs: {
+            swiper: slider1Thumb,
+          },
+        });
+      }
+    }
+  } catch (err) {
+    console.error('Testimonials hydration error:', err);
+  }
+}
+

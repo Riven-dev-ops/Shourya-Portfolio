@@ -27,9 +27,10 @@ async function main() {
     console.log('Admin user already exists.');
   }
 
-  // 2. Clear Existing Projects and FAQs
+  // 2. Clear Existing Projects, FAQs and Testimonials
   await prisma.project.deleteMany({});
   await prisma.faq.deleteMany({});
+  await prisma.testimonial.deleteMany({});
 
   // 3. Create Projects
   const projects = [
@@ -146,6 +147,47 @@ async function main() {
     await prisma.faq.create({ data: faq });
   }
   console.log('FAQs seeded successfully.');
+
+  // 5. Create Testimonials
+  const testimonials = [
+    {
+      name: 'Miranda H. Halim',
+      role: 'Founder & CEO',
+      company: 'Astro',
+      avatarUrl: 'assets/imgs/avatar/avatar-1.png',
+      comment: 'Exceptional UI/UX design! Shourya transformed our product design entirely. The visual layout and transition effects are absolutely state-of-the-art.',
+      rating: 5
+    },
+    {
+      name: 'Edward Jenkins',
+      role: 'Product Manager',
+      company: 'Purei',
+      avatarUrl: 'assets/imgs/avatar/avatar-12.png',
+      comment: 'Shourya is a stellar front-end developer and designer. Deliveries are always on-time, and the attention to micro-interactions and branding details is exceptional.',
+      rating: 5
+    },
+    {
+      name: 'Sophia Lopez',
+      role: 'Creative Director',
+      company: 'Freshzi',
+      avatarUrl: 'assets/imgs/avatar/avatar-3.png',
+      comment: 'Highly creative designer who blends branding and interface design perfectly. Excellent communication and design quality.',
+      rating: 5
+    },
+    {
+      name: 'Marcus Chen',
+      role: 'Tech Lead',
+      company: 'ai.core',
+      avatarUrl: 'assets/imgs/avatar/avatar-11.png',
+      comment: 'Exceptional responsiveness and UI design consistency. Highly recommended for full-scale application styling.',
+      rating: 5
+    }
+  ];
+
+  for (const testimonial of testimonials) {
+    await prisma.testimonial.create({ data: testimonial });
+  }
+  console.log('Testimonials seeded successfully.');
   console.log('Seeding completed successfully!');
 }
 
